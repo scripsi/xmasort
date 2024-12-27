@@ -23,7 +23,7 @@ The sort order is represented as integer Hue values on the colour wheel (0-360 d
 
 The Plasma 2040s are all flashed with Pimoroni's [Pirate-brand MicroPython](https://github.com/pimoroni/pimoroni-pico/releases) version 1.23.0. [Microsoft Visual Studio Code](https://code.visualstudio.com/) is used to program them, with the help of the recently-released official [Raspberry Pi Pico Extension](https://marketplace.visualstudio.com/items?itemName=raspberry-pi.raspberry-pi-pico). The `main.py` program installed on each Plasma 2040 will run automatically whenever it is powered on.
 
-The basic `main.py` imports necessary libraries, sets up constants for things like the number of LEDs and default brightness, and has functions for initialising the array, randomising the array, and updating the LED colours from the array. It then enters an infinite loop, randomising and then sorting the array using the chosen algorithm.
+The basic `main.py` imports necessary libraries, sets up constants for things like the number of LEDs and default brightness, and has functions for initialising the array, randomising the array, and updating the LED colours from the array. It then enters an infinite loop, repeatedly randomising and then sorting the array using the chosen algorithm.
 
 ## First Day: Bubble sort
 
@@ -35,7 +35,7 @@ The LED animation shows a "bubble" of active (white) elements repeatedly walking
 
 ## Second Day: Gnome sort (and some efficiency improvements)
 
-**On the second day of Christmas** (Boxing Day), I chose the Christmassy-sounding [Gnome sort](https://en.wikipedia.org/wiki/Gnome_sort). Gnome sort is unusual in that the algorithm doesn't rely on a series of nested loops to traverse the array. Instead, It imagines a garden gnome rearranging a line of plant pots into size order according to a few simple movement rules. The gnome starts at the beginning (current position, _p_ = 0) and uses the rules to determine its current working position and how to arrange the pots at that position:
+**On the second day of Christmas** (Boxing Day), I chose the Christmassy-sounding [Gnome sort](https://en.wikipedia.org/wiki/Gnome_sort). Gnome sort is unusual in that the algorithm doesn't rely on a series of nested loops to traverse the array. Instead, It imagines a hard-working garden gnome rearranging a line of plant pots into size order according to a few simple movement rules. The gnome starts at the beginning (current position, _p_ = 0) and uses the rules to determine its current working position and how to arrange the pots at that position:
 
 - If _p_ = 0, **move forwards** to _p_ + 1
 - If the pot at _p_ is bigger than the pot at _p_ - 1, **move forwards** to _p_ + 1
@@ -44,4 +44,12 @@ The LED animation shows a "bubble" of active (white) elements repeatedly walking
 
 The LED animation shows a white dot (the gnome) running up and down the string of LEDs, gradually sorting them into the right order.
 
-I also decided to make a few efficiency improvements to the main program. Firstly, there was no need to update the whole LED string when only a few elements had changed, so I added a couple of optional arguments to the update_leds routine to provide a list of which LEDs to update and to set whether or not they were "active" (white). Secondly, to save storage space, I no longer store the Saturation and Value of each LED in the array, since these don't change much and aren't used for sorting --- the array now simply contains the Hue values, which are rounded to the nearest integer to allow me to use some integer-only sorting methods in future.
+I also decided to make a few efficiency improvements to the main program. Firstly, there was no need to update the whole LED string when only a few elements had changed, so I added a couple of optional arguments to the `update_leds` routine to provide a list of which LEDs to update and to set whether or not they are "active" (white). Secondly, to save storage space, I no longer store the Saturation and Value of each LED in the array, since these don't change much and aren't used for sorting --- the array now simply contains the Hue values, which are rounded to the nearest integer to allow me to use some integer-only sorting methods in future.
+
+## Third Day: Insertion sort (and a configuration file)
+
+**On the third day of Christmas**, I chose [Insertion sort](https://en.wikipedia.org/wiki/Insertion_sort). This works by iterating through the array one element at a time, searching backwards for the correctly sorted position of that source element. Once the correct position is found, the source element is moved and the intervening elements are shifted forwards to make room.
+
+The LED animation shows white dots for the current source element staying in place, while the search position moves backwards until the correct location is found. All the colours in between shift forwards one space.
+
+Updating the different LED strings each day was becoming a chore, because I kept having to remember how many LEDs were in each string and edit `main.py` accordingly before uploading it to the attached Plasma 2040. To get around this, I created a simple configuration file, `config.py`, to contain a value for the number of LEDs, and then imported it into `main.py` with a simple bit of error checking. Each Plasma 2040 can now have its own version of `config.py` with the right number of LEDs for the string it's connected to, and I no longer have to edit `main.py` before uploading it each time. I can also use `config.py` to set separate values of things like brightness and animation speed for each LED string if I want to.
