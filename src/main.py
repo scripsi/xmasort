@@ -162,7 +162,7 @@ def bead_sort():
     for i in range(len(led_array)-1, len(led_array)-sum-1, -1):
       bead_array[i][j] = 1
 
-  # sort the values back into the led_array
+  # sort the values back into the LED array
   for i in range(len(led_array)):
     sum = 0
     for j in range(max_val):
@@ -171,14 +171,41 @@ def bead_sort():
     # Light up the LEDs again in the right order
     update_leds([i])
     time.sleep(delay)
-  
+
+def pancake_sort():
+
+  def biggest_pancake_in_stack(stack_bottom, stack_top: int) -> int:
+    pancake = stack_bottom
+    for i in range(stack_bottom,stack_top):
+      if led_array[i] > led_array[pancake]:
+        pancake = i
+    return pancake
+
+  def flip_stack(stack_bottom, stack_top: int):
+    top_pancake = stack_top
+    bottom_pancake = stack_bottom
+    while bottom_pancake < top_pancake:
+      led_array[bottom_pancake], led_array[top_pancake] = led_array[top_pancake], led_array[bottom_pancake]
+      update_leds([bottom_pancake,top_pancake])
+      time.sleep(delay)
+      top_pancake -= 1
+      bottom_pancake +=1
+    
+  pancake_stack = len(led_array)
+  while pancake_stack > 1:
+    biggest = biggest_pancake_in_stack(0,pancake_stack)
+    if biggest != pancake_stack - 1:
+      flip_stack(biggest,pancake_stack - 1)
+    pancake_stack -= 1
+
 init_rainbow()
 update_leds()
 
 while True:
   shuffle_array()
   time.sleep(1)
-  bead_sort()
+  pancake_sort()
+  # bead_sort()
   # insertion_sort()
   # gnome_sort()
   # bubble_sort()

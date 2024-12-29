@@ -27,7 +27,7 @@ The basic `main.py` imports necessary libraries, sets up constants for things li
 
 ## First Day: Bubble sort
 
-**On the first day of Christmas** (Christmas Day), I thought I would start with something straightforward. Bubble sort is often used as the first example in a discussion of sorting algorithms because, while it is not particularly quick or efficient, it is easy to visualise how it works and is therefore simple to program.
+**On the first day of Christmas** (Christmas Day), I thought I would start with something straightforward. [Bubble sort](https://en.wikipedia.org/wiki/Bubble_sort) is often used as the first example in a discussion of sorting algorithms because, while it is not particularly quick or efficient, it is easy to visualise how it works and is therefore simple to program.
 
 The bubble sort algorithm simply iterates repeatedly through the unsorted array, comparing neighbouring elements and swapping them if they are in the wrong order. The first iteration works through the whole array and guarantees at the end that the last element must be in the right position, therefore the next iteration can skip the last element, and so on, skipping more and more elements at the end on each iteration, until the whole array is sorted. If the algorithm runs through a whole iteration without swapping any elements, then the complete array must be sorted and the routine can end prematurely.
 
@@ -60,4 +60,10 @@ Updating the different LED strings each day was becoming a chore, because I kept
 
 Visualising this sort method was difficult. Trying to represent the collapsing rows of the abacus just made it too frenetic, so in the end I settled for blanking out the randomised LEDs one-by-one as they were extracted into the two-dimensional array, and then lighting them again in the sorted order.
 
-I also added some code to to respond to button presses so that the speed of the animation could be changed using the A and B buttons on the Plasma 2040. 
+I also added some code to to respond to button presses so that the speed of the animation could be changed using the A and B buttons on the Plasma 2040.
+
+## Fifth Day: Pancake sort
+
+**On the fifth day of Christmas**, I was inspired by the morning's breakfast pancakes to try [Pancake sort](https://en.wikipedia.org/wiki/Pancake_sorting). This represents the unsorted array as a stack of unevenly-sized pancakes. A spatula can be inserted into the stack at any point and used to flip a group of pancakes upside-down. Repeated flips are used to sort the stack of pancakes into size order. The more challenging, "burnt" pancake sort imagines that the pancakes are burnt on one side and all the burnt sides must be sorted in the same orientation. However, my implementation is of a "simple" pancake sort, where it doesn't matter which way the pancakes end up --- LEDs don't have a right or wrong way round, after all!
+
+The LED animation shows sections of LEDs being swapped around as the spatula flips them into a sorted rainbow.
