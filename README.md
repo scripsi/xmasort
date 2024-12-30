@@ -67,3 +67,11 @@ I also added some code to to respond to button presses so that the speed of the 
 **On the fifth day of Christmas**, I was inspired by the morning's breakfast pancakes to try [Pancake sort](https://en.wikipedia.org/wiki/Pancake_sorting). This represents the unsorted array as a stack of unevenly-sized pancakes. A spatula can be inserted into the stack at any point and used to flip a group of pancakes upside-down. Repeated flips are used to sort the stack of pancakes into size order. The more challenging, "burnt" pancake sort imagines that the pancakes are burnt on one side and all the burnt sides must be sorted in the same orientation. However, my implementation is of a "simple" pancake sort, where it doesn't matter which way the pancakes end up --- LEDs don't have a right or wrong way round, after all!
 
 The LED animation shows sections of LEDs being swapped around as the spatula flips them into a sorted rainbow.
+
+## Sixth Day: Tree sort (and sort method selection)
+
+**On the sixth day of Christmas**, I used [Tree sort](https://en.wikipedia.org/wiki/Tree_sort). This simply inserts the elements of the unsorted array into a binary tree structure, and then traverses the branches of the tree in order to produce the sorted array.
+
+Representing a 2-dimensional binary tree structure on a 1-dimensional string of LEDs wasn't really possible!, so the animation just shows the sorted values overwriting the unsorted array in sequence.
+
+The sort methods are all now collected together in a list, so that you can select them with the USER button on the Plasma 2040. Pressing the USER button will cycle through the available sort methods to choose the one used next time the LEDs are randomised --- it won't interrupt the sort that is currently in progress!

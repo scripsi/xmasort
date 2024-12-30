@@ -18,6 +18,10 @@ else:
 
 delay = STEP_DELAY
 
+day = 6
+
+next_sort_method = day - 1
+
 def button_a_pressed(event):
   global delay
   delay = min(delay * 2, 1.0)
@@ -28,10 +32,17 @@ def button_b_pressed(event):
   delay = max(delay / 2, 0.01)
   print("Button B pressed. Delay is now: ", delay)
 
+def button_user_pressed(event):
+  global next_sort_method
+  next_sort_method = (next_sort_method + 1) % day
+  print("Button USER pressed. Next sort method is Day", next_sort_method + 1)
+
 button_a = Pin(plasma2040.BUTTON_A,Pin.IN,Pin.PULL_UP)
 button_a.irq(handler=button_a_pressed, trigger=Pin.IRQ_FALLING)
 button_b = Pin(plasma2040.BUTTON_B,Pin.IN,Pin.PULL_UP)
 button_b.irq(handler=button_b_pressed, trigger=Pin.IRQ_FALLING)
+button_user = Pin(plasma2040.USER_SW,Pin.IN,Pin.PULL_UP)
+button_user.irq(handler=button_user_pressed, trigger=Pin.IRQ_FALLING)
 
 led_strip = plasma.WS2812(NUM_LEDS, 0, 0, plasma2040.DAT)
 led_array = []
@@ -56,7 +67,7 @@ def init_rainbow():
     led_array.append(round((i / NUM_LEDS) * 360))
 
 def shuffle_array():
-  for i in range(NUM_LEDS-1,0,-1):
+  for i in range(len(led_array)-1,0,-1):
          
     j = random.randint(0,i)
     
@@ -198,15 +209,56 @@ def pancake_sort():
       flip_stack(biggest,pancake_stack - 1)
     pancake_stack -= 1
 
+def tree_sort():
+
+  global led_array
+
+  class TreeNode:
+    def __init__(self, hue):
+      self.left = None
+      self.right = None
+      self.hue = hue
+
+  def insert(root, hue):
+    if root is None:
+        return TreeNode(hue)
+    
+    if hue < root.hue:
+        root.left = insert(root.left, hue)
+    else:
+        root.right = insert(root.right, hue)
+    
+    return root
+
+  def inorder_traversal(root):
+    if root:
+        inorder_traversal(root.left)
+        led_array.append(root.hue)
+        update_leds(range(len(led_array)))
+        time.sleep(delay)
+        inorder_traversal(root.right)
+  
+  root = None
+  for h in led_array:
+    root = insert(root, h)
+
+  led_array.clear()
+  inorder_traversal(root)
+
 init_rainbow()
-update_leds()
+update_leds(range(len(led_array)))
+
+sort_methods = [bubble_sort,
+                gnome_sort,
+                insertion_sort,
+                bead_sort,
+                pancake_sort,
+                tree_sort]
 
 while True:
+  print("Randomising LEDs")
   shuffle_array()
   time.sleep(1)
-  pancake_sort()
-  # bead_sort()
-  # insertion_sort()
-  # gnome_sort()
-  # bubble_sort()
+  print("Sorting LEDs with Day",next_sort_method + 1,"-",sort_methods[next_sort_method].__name__)
+  sort_methods[next_sort_method]()
   time.sleep(10)
