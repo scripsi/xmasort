@@ -75,3 +75,9 @@ The LED animation shows sections of LEDs being swapped around as the spatula fli
 Representing a 2-dimensional binary tree structure on a 1-dimensional string of LEDs wasn't really possible!, so the animation just shows the sorted values overwriting the unsorted array in sequence.
 
 The sort methods are all now collected together in a list, so that you can select them with the USER button on the Plasma 2040. Pressing the USER button will cycle through the available sort methods to choose the one used next time the LEDs are randomised --- it won't interrupt the sort that is currently in progress!
+
+## Seventh Day: Cocktail shaker sort
+
+**On the seventh day of Christmas** (New Year's Eve), I celebrate with Cocktail Shaker sort! A variation of Bubble sort from the first day, Cocktail Shaker sort iterates both up and down the unsorted array, swapping elements in both directions to sort them. The sorted array fills from both the end and the beginning, and finishes somewhere near the middle.
+
+The active element in the LED animation rattles back and forth along the string of lights like ice in a cocktail shaker, dragging the highest and lowest elements behind it to fill in from each end with a sorted rainbow.

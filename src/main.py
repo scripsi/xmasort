@@ -18,7 +18,7 @@ else:
 
 delay = STEP_DELAY
 
-day = 6
+day = 7
 
 next_sort_method = day - 1
 
@@ -245,6 +245,42 @@ def tree_sort():
   led_array.clear()
   inorder_traversal(root)
 
+def cocktail_sort():
+  start_position = 0
+  end_position = len(led_array) - 1
+  while start_position < end_position:
+    for i in range(start_position,end_position):
+      # highlight the elements being compared
+      update_leds([i + 1], active = True)
+
+      # See if elements are the right way around...
+      if led_array[i] > led_array[i + 1]:
+        # ... and swap them if they are not
+        led_array[i], led_array[i + 1] = led_array[i + 1], led_array[i]
+        last_swap_position = i
+      time.sleep(delay)
+      # Remove highlight
+      update_leds([i, i + 1], active = False)  
+
+    end_position = last_swap_position
+    
+    for j in range(end_position,start_position - 1,-1):
+
+      # highlight the elements being compared
+      update_leds([j], active = True)
+
+      # See if elements are the right way around...
+      if led_array[j] > led_array[j + 1]:
+        # ... and swap them if they are not
+        led_array[j], led_array[j + 1] = led_array[j + 1], led_array[j]
+        last_swap_position = j
+      time.sleep(delay)
+      # Remove highlight
+      update_leds([j, j + 1], active = False)
+
+    start_position = last_swap_position
+
+
 init_rainbow()
 update_leds(range(len(led_array)))
 
@@ -253,7 +289,8 @@ sort_methods = [bubble_sort,
                 insertion_sort,
                 bead_sort,
                 pancake_sort,
-                tree_sort]
+                tree_sort,
+                cocktail_sort]
 
 while True:
   print("Randomising LEDs")
