@@ -18,7 +18,7 @@ else:
 
 delay = STEP_DELAY
 
-day = 7
+day = 8
 
 next_sort_method = day - 1
 
@@ -280,6 +280,24 @@ def cocktail_sort():
 
     start_position = last_swap_position
 
+def selection_sort():
+  for i in range(len(led_array)-1):
+    min = i
+    for j in range(i+1,len(led_array)):
+      update_leds([j], active = True)
+      time.sleep(delay)
+      if led_array[j] < led_array[min]:
+        update_leds([min], lit = True)
+        update_leds([j], active = False, lit = False)
+        min = j
+      else:
+        update_leds([j], active = False)
+    
+    if min != i:
+      led_array[i], led_array[min] = led_array[min], led_array[i]
+      update_leds([i,min], active = False, lit = True)
+      time.sleep(delay)
+
 
 init_rainbow()
 update_leds(range(len(led_array)))
@@ -290,7 +308,8 @@ sort_methods = [bubble_sort,
                 bead_sort,
                 pancake_sort,
                 tree_sort,
-                cocktail_sort]
+                cocktail_sort,
+                selection_sort]
 
 while True:
   print("Randomising LEDs")

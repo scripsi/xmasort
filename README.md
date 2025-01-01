@@ -78,6 +78,12 @@ The sort methods are all now collected together in a list, so that you can selec
 
 ## Seventh Day: Cocktail shaker sort
 
-**On the seventh day of Christmas** (New Year's Eve), I celebrate with Cocktail Shaker sort! A variation of Bubble sort from the first day, Cocktail Shaker sort iterates both up and down the unsorted array, swapping elements in both directions to sort them. The sorted array fills from both the end and the beginning, and finishes somewhere near the middle.
+**On the seventh day of Christmas** (New Year's Eve), I celebrate with [Cocktail Shaker sort](https://en.wikipedia.org/wiki/Cocktail_shaker_sort)! A variation of Bubble sort from the first day, Cocktail Shaker sort iterates both up and down the unsorted array, swapping elements in both directions to sort them. The sorted array fills from both the end and the beginning, and finishes somewhere near the middle.
 
 The active element in the LED animation rattles back and forth along the string of lights like ice in a cocktail shaker, dragging the highest and lowest elements behind it to fill in from each end with a sorted rainbow.
+
+## Eighth Day: Selection sort
+
+**On the eighth day of Christmas** (New Year's Day), it's [Selection sort](https://en.wikipedia.org/wiki/Selection_sort). This iterates through each element of the unsorted array, searching for the minimum element to be found in the remainder of the array and swapping it with the current element.
+
+The LED animation shows the active element repeatedly sweeping through the unsorted portion of the chain and blanking out the current minimum element that it has found.
