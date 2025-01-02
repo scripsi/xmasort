@@ -11,14 +11,16 @@ except:
   NUM_LEDS = 50
   BRIGHTNESS = 0.7
   STEP_DELAY = 0.05
+  LED_COLOR_ORDER = 2 # RGB:0; RBG:1; GRB:2; GBR:3; BRG:4; BGR:5
 else:
   NUM_LEDS = config.NUM_LEDS
   BRIGHTNESS = config.BRIGHTNESS
   STEP_DELAY = config.STEP_DELAY
+  LED_COLOR_ORDER = config.LED_COLOR_ORDER
 
 delay = STEP_DELAY
 
-day = 8
+day = 9
 
 next_sort_method = day - 1
 
@@ -44,7 +46,7 @@ button_b.irq(handler=button_b_pressed, trigger=Pin.IRQ_FALLING)
 button_user = Pin(plasma2040.USER_SW,Pin.IN,Pin.PULL_UP)
 button_user.irq(handler=button_user_pressed, trigger=Pin.IRQ_FALLING)
 
-led_strip = plasma.WS2812(NUM_LEDS, 0, 0, plasma2040.DAT)
+led_strip = plasma.WS2812(NUM_LEDS, 0, 0, plasma2040.DAT, color_order = LED_COLOR_ORDER)
 led_array = []
 
 led_strip.start()
@@ -298,6 +300,32 @@ def selection_sort():
       update_leds([i,min], active = False, lit = True)
       time.sleep(delay)
 
+def bucket_sort():
+  # set up some empty buckets
+  bucket_number = 12
+  buckets = []
+  for bucket in range(bucket_number):
+    buckets.append([])
+
+  # Run through the unsorted array putting the values into the right buckets
+  # Note: values in led_array are 0-360, so dividing by 30 gives 12 buckets!
+  for i in range(len(led_array)):
+    bucket = led_array[i] // 30
+    buckets[bucket].append(led_array[i])
+  
+  # clear the array ...
+  update_leds(lit = False)
+  time.sleep(delay)
+  led_array.clear()
+
+  # ... and pour the buckets into it
+  for bucket in range(bucket_number):
+    led_array.extend(buckets[bucket])
+    update_leds(range(len(led_array)), lit = True)
+    time.sleep(delay*5)
+
+  # Finally, run insertion sort
+  insertion_sort()
 
 init_rainbow()
 update_leds(range(len(led_array)))
@@ -309,7 +337,8 @@ sort_methods = [bubble_sort,
                 pancake_sort,
                 tree_sort,
                 cocktail_sort,
-                selection_sort]
+                selection_sort,
+                bucket_sort]
 
 while True:
   print("Randomising LEDs")
