@@ -3,6 +3,7 @@ from plasma import plasma2040
 from machine import Pin
 import time
 import random
+import math
 
 try:
   import config
@@ -20,7 +21,7 @@ else:
 
 delay = STEP_DELAY
 
-day = 9
+day = 10
 
 next_sort_method = day - 1
 
@@ -327,6 +328,55 @@ def bucket_sort():
   # Finally, run insertion sort
   insertion_sort()
 
+def heap_sort():
+
+  def left_child(root):
+    l = (2 * root) + 1
+    return l
+
+  def right_child(root):
+    r = (2 * root) + 2
+    return r
+
+  def parent(root):
+    p = math.floor((root - 1) / 2)
+    return p
+
+  def sift_down(root, end):
+    while left_child(root) < end:
+      child = left_child(root)
+      if (child + 1 < end) and (led_array[child] < led_array[child + 1]):
+        child += 1
+      
+      if led_array[root] < led_array[child]:
+        update_leds([root,child], active = True)
+        time.sleep(delay)
+        led_array[root], led_array[child] = led_array[child], led_array[root]
+        update_leds([root,child])
+        root = child
+      else:
+        return
+
+  def heapify(count):
+    start = parent(count - 1) + 1
+
+    while start > 0:
+      start -= 1
+      sift_down(start,count)
+    
+  heapify(len(led_array))
+  
+  end = len(led_array)
+  while end > 1:
+    end -= 1
+    update_leds([0, end], active = True)
+    time.sleep(delay)
+    led_array[0], led_array[end] = led_array[end], led_array[0]
+    update_leds([0,end])
+    sift_down(0, end)
+  
+  update_leds()
+
 init_rainbow()
 update_leds(range(len(led_array)))
 
@@ -338,7 +388,8 @@ sort_methods = [bubble_sort,
                 tree_sort,
                 cocktail_sort,
                 selection_sort,
-                bucket_sort]
+                bucket_sort,
+                heap_sort]
 
 while True:
   print("Randomising LEDs")
