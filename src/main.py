@@ -21,7 +21,7 @@ else:
 
 delay = STEP_DELAY
 
-day = 10
+day = 11
 
 next_sort_method = day - 1
 
@@ -377,6 +377,56 @@ def heap_sort():
   
   update_leds()
 
+def quick_sort():
+
+  def partition(start, end):
+    middle = math.floor((start+end) / 2)
+    if led_array[middle] < led_array[start]:
+      update_leds([start, middle], active = True)
+      time.sleep(delay)
+      led_array[start], led_array[middle] = led_array[middle], led_array[start]
+      update_leds([start,middle], active = False)
+    if led_array[end] < led_array[start]:
+      update_leds([start,end], active = True)
+      time.sleep(delay)
+      led_array[start], led_array[end] = led_array[end], led_array[start]
+      update_leds([start,end], active = False)
+    if led_array[middle] < led_array[end]:
+      update_leds([middle,end], active = True)
+      time.sleep(delay)
+      led_array[middle], led_array[end] = led_array[end], led_array[middle]
+      update_leds([middle,end], active = False)
+
+    pivot = led_array[end]
+    i = start
+    j = end
+
+    while True:
+      while led_array[i] < pivot:
+        i += 1
+
+      while led_array[j] > pivot:
+        j -= 1
+
+      if i >= j:
+        return j
+
+      update_leds([i,j], active = True)
+      time.sleep(delay)
+      led_array[i], led_array[j] = led_array[j], led_array[i]
+      update_leds([i,j], active = False)
+
+  def qsort(start, end):
+    if (start >= end) or (start < 0):
+      return
+    
+    pivot = partition(start,end)
+    qsort(start,pivot)
+    qsort(pivot + 1, end)
+
+  qsort(0, len(led_array) - 1)
+
+
 init_rainbow()
 update_leds(range(len(led_array)))
 
@@ -389,7 +439,8 @@ sort_methods = [bubble_sort,
                 cocktail_sort,
                 selection_sort,
                 bucket_sort,
-                heap_sort]
+                heap_sort,
+                quick_sort]
 
 while True:
   print("Randomising LEDs")
