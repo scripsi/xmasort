@@ -27,6 +27,8 @@ The basic `main.py` imports necessary libraries, sets up constants for things li
 
 ## First Day: Bubble sort
 
+![Bubble Sort](img/christmas-sorted-01-bubble.gif)
+
 **On the first day of Christmas** (Christmas Day), I thought I would start with something straightforward. [Bubble sort](https://en.wikipedia.org/wiki/Bubble_sort) is often used as the first example in a discussion of sorting algorithms because, while it is not particularly quick or efficient, it is easy to visualise how it works and is therefore simple to program.
 
 The bubble sort algorithm simply iterates repeatedly through the unsorted array, comparing neighbouring elements and swapping them if they are in the wrong order. The first iteration works through the whole array and guarantees at the end that the last element must be in the right position, therefore the next iteration can skip the last element, and so on, skipping more and more elements at the end on each iteration, until the whole array is sorted. If the algorithm runs through a whole iteration without swapping any elements, then the complete array must be sorted and the routine can end prematurely.
