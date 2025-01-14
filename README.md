@@ -9,6 +9,8 @@ I have a few strings of ws2812 LEDs and some Pimoroni Plasma 2040 boards to run 
 
 ## Hardware
 
+![Hardware used (banana for scale)](img/christmas-sorted-hardware.jpg)
+
 The hardware consists of [Pimoroni Plasma 2040](https://shop.pimoroni.com/products/plasma-2040) boards connected to a variety of programmable RGB LED strings and powered using USB-C. I have three types of LED string:
 
 - [10-metre LED star wire](https://shop.pimoroni.com/products/10m-addressable-rgb-led-star-wire) with 66 star-shaped leds
@@ -21,7 +23,9 @@ The Plasma 2040 boards are encased in [these 3D-printed enclosures](https://www.
 
 The sort order is represented as integer Hue values on the colour wheel (0-360 degrees) in an array (actually a Python list) equal in size to the number of LEDs on the string. The colour of each LED is set by converting HSV colour values to RGB, using the Hue set in the corresponding array element, with Saturation = 1 and Value set to a default brightness. The "active" elements (the ones being swapped to randomise or sort the array) are shown in white (Saturation = 0). When the array is properly sorted, the LEDs should show a smooth rainbow of colours. 
 
-The Plasma 2040s are all flashed with Pimoroni's [Pirate-brand MicroPython](https://github.com/pimoroni/pimoroni-pico/releases) version 1.23.0. [Microsoft Visual Studio Code](https://code.visualstudio.com/) is used to program them, with the help of the recently-released official [Raspberry Pi Pico Extension](https://marketplace.visualstudio.com/items?itemName=raspberry-pi.raspberry-pi-pico). The `main.py` program installed on each Plasma 2040 will run automatically whenever it is powered on.
+The Plasma 2040s are all flashed with Pimoroni's [Pirate-brand MicroPython](https://github.com/pimoroni/pimoroni-pico/releases) version 1.23.0. [Microsoft Visual Studio Code](https://code.visualstudio.com/) is used to program them, with the help of the recently-released official [Raspberry Pi Pico Extension](https://marketplace.visualstudio.com/items?itemName=raspberry-pi.raspberry-pi-pico). The `main.py` program installed on each Plasma 2040 will run automatically whenever it is powered on, taking its configuration from `config.py`.
+
+To install, copy `main.py` and `config.py` from the `src/` directory of this repository to the Plasma 2040. If using the Raspberry Pi Pico extension in VSCode, you can do this by opening the command palette with CTRL-SHIFT-P and choosing the `MicroPico: Upload file to pico` command for each file. If necessary, edit `config.py` to match your LED string before uploading.
 
 The basic `main.py` imports necessary libraries, sets up constants for things like the number of LEDs and default brightness, and has functions for initialising the array, randomising the array, and updating the LED colours from the array. It then enters an infinite loop, repeatedly randomising and then sorting the array using the chosen algorithm.
 
@@ -37,6 +41,8 @@ The LED animation shows a "bubble" of active (white) elements repeatedly walking
 
 ## Second Day: Gnome sort (and some efficiency improvements)
 
+![Gnome sort(](img/christmas-sorted-02-gnome.gif)
+
 **On the second day of Christmas** (Boxing Day), I chose the Christmassy-sounding [Gnome sort](https://en.wikipedia.org/wiki/Gnome_sort). Gnome sort is unusual in that the algorithm doesn't rely on a series of nested loops to traverse the array. Instead, It imagines a hard-working garden gnome rearranging a line of plant pots into size order according to a few simple movement rules. The gnome starts at the beginning (current position, _p_ = 0) and uses the rules to determine its current working position and how to arrange the pots at that position:
 
 - If _p_ = 0, **move forwards** to _p_ + 1
@@ -50,6 +56,8 @@ I also decided to make a few efficiency improvements to the main program. Firstl
 
 ## Third Day: Insertion sort (and a configuration file)
 
+![Gnome sort(](img/christmas-sorted-03-insertion.gif)
+
 **On the third day of Christmas**, I chose [Insertion sort](https://en.wikipedia.org/wiki/Insertion_sort). This works by iterating through the array one element at a time, searching backwards for the correctly sorted position of that source element. Once the correct position is found, the source element is moved and the intervening elements are shifted forwards to make room.
 
 The LED animation shows white dots for the current source element staying in place, while the search position moves backwards until the correct location is found. All the colours in between shift forwards one space.
@@ -57,6 +65,8 @@ The LED animation shows white dots for the current source element staying in pla
 Updating the different LED strings each day was becoming a chore, because I kept having to remember how many LEDs were in each string and edit `main.py` accordingly before uploading it to the attached Plasma 2040. To get around this, I created a simple configuration file, `config.py`, to contain a value for the number of LEDs, and then imported it into `main.py` with a simple bit of error checking. Each Plasma 2040 can now have its own version of `config.py` with the right number of LEDs for the string it's connected to, and I no longer have to edit `main.py` before uploading it each time. I can also use `config.py` to set separate values of things like brightness and animation speed for each LED string if I want to.
 
 ## Fourth Day: Bead sort (and speed control)
+
+![Gnome sort(](img/christmas-sorted-04-bead.gif)
 
 **On the fourth day of Christmas**, it's the turn of [Bead sort](https://en.wikipedia.org/wiki/Bead_sort). Imagine an abacus laid on a table and turned so that the beads slide away from you in columns. The abacus has the same number of columns as the maximum value held in your array, so that each value in the array can be represented as a row of beads across the columns of the abacus. Now tilt the abacus vertical so that your carefully arranged rows of beads all drop down, and _voila!_ --- your array has been magically sorted in a single movement, so that the longest row (largest value) is at the bottom and the shortest row (smallest value) is at the top. This is the basis of Bead sort: It converts the values from the unsorted array into a two-dimensional array of ones and zeros representing the rows and columns of beads, then "collapses" the columns before converting the rows back into the sorted array.
 
@@ -66,11 +76,15 @@ I also added some code to to respond to button presses so that the speed of the 
 
 ## Fifth Day: Pancake sort
 
+![Gnome sort(](img/christmas-sorted-05-pancake.gif)
+
 **On the fifth day of Christmas**, I was inspired by the morning's breakfast pancakes to try [Pancake sort](https://en.wikipedia.org/wiki/Pancake_sorting). This represents the unsorted array as a stack of unevenly-sized pancakes. A spatula can be inserted into the stack at any point and used to flip a group of pancakes upside-down. Repeated flips are used to sort the stack of pancakes into size order. The more challenging, "burnt" pancake sort imagines that the pancakes are burnt on one side and all the burnt sides must be sorted in the same orientation. However, my implementation is of a "simple" pancake sort, where it doesn't matter which way the pancakes end up --- LEDs don't have a right or wrong way round, after all!
 
 The LED animation shows sections of LEDs being swapped around as the spatula flips them into a sorted rainbow.
 
 ## Sixth Day: Tree sort (and sort method selection)
+
+![Gnome sort(](img/christmas-sorted-06-tree.gif)
 
 **On the sixth day of Christmas**, I used [Tree sort](https://en.wikipedia.org/wiki/Tree_sort). This simply inserts the elements of the unsorted array into a binary tree structure, and then traverses the branches of the tree in order to produce the sorted array.
 
@@ -80,17 +94,23 @@ The sort methods are all now collected together in a list, so that you can selec
 
 ## Seventh Day: Cocktail shaker sort
 
+![Gnome sort(](img/christmas-sorted-07-cocktail.gif)
+
 **On the seventh day of Christmas** (New Year's Eve), I celebrate with [Cocktail Shaker sort](https://en.wikipedia.org/wiki/Cocktail_shaker_sort)! A variation of Bubble sort from the first day, Cocktail Shaker sort iterates both up and down the unsorted array, swapping elements in both directions to sort them. The sorted array fills from both the end and the beginning, and finishes somewhere near the middle.
 
 The active element in the LED animation rattles back and forth along the string of lights like ice in a cocktail shaker, dragging the highest and lowest elements behind it to fill in from each end with a sorted rainbow.
 
 ## Eighth Day: Selection sort
 
+![Gnome sort(](img/christmas-sorted-08-selection.gif)
+
 **On the eighth day of Christmas** (New Year's Day), it's [Selection sort](https://en.wikipedia.org/wiki/Selection_sort). This iterates through each element of the unsorted array, searching for the minimum element to be found in the remainder of the array and swapping it with the current element.
 
 The LED animation shows the active element repeatedly sweeping through the unsorted portion of the chain and blanking out the current minimum element that it has found.
 
 ## Ninth Day: Bucket sort (and fixing colour order)
+
+![Gnome sort(](img/christmas-sorted-09-bucket.gif)
 
 **On the ninth day of Christmas**, [Bucket sort](https://en.wikipedia.org/wiki/Bucket_sort) is the chosen algorithm. Several sorting routines can be optimised by combining two or more different methods, and bucket sort is one of these. It begins by dividing the elements of the unsorted array into a number of categories or "buckets" according to their value. Then, the contents of each bucket are concatenated together before being sorted using a different sort method. Categorising the unsorted elements in this way is a relatively quick operation, but it can optimise the subsequent sort operation by reducing the total number of comparisons that have to be made. In my implementation, I categorise the unsorted elements into 12 buckets and then use insertion sort on the resulting array. If you compare with a standard insertion sort (Third day), you can see that the algorithm only has to seek within each bucket rather that the whole remaining array to find the element it needs to insert, and it therefore completes much more quickly.
 
@@ -100,11 +120,15 @@ I have been puzzled, up to now, by the fact that one of my strings of LEDs alway
 
 ## Tenth Day: Heapsort
 
+![Gnome sort(](img/christmas-sorted-10-heap.gif)
+
 **On the tenth day of Christmas**, I chose [Heapsort](https://en.wikipedia.org/wiki/Heapsort). A heap is a tree-like data structure that can be contained within a one-dimensional array - the parent and child nodes of the tree are defined by their elements' position in the array. Heapsort runs in two phases --- the first, "heapify", stage reorganises the unsorted array elements into a heap. The second phase repeatedly extracts the largest value from the heap and places it at the upper end, while "sifting down" the remaining elements of the heap to make space. The sorted array thus fills in from the end until the heap is emptied.
 
 The LED animation shows the elements being rearranged into the heap, which then shrinks down to reveal the sorted rainbow.
 
 ## Eleventh Day: Quicksort
+
+![Gnome sort(](img/christmas-sorted-11-quick.gif)
 
 **On the eleventh day of Christmas**, it's the turn of [Quicksort](https://en.wikipedia.org/wiki/Quicksort). This is a method that is commonly used in computing to solve general sorting problems --- it is the default _sort()_ function of many programming languages, like _C_, _Python_, _Java_ etc. It works by "dividing and conquering", using recursion to partition the array around a "pivot" element into smaller and smaller sections which are sorted by swapping elements at each end if they are in the wrong order.
 
@@ -113,6 +137,8 @@ The LED animation shows the array being partitioned and sorted in gradually smal
 While testing and debugging the sort methods for this project I would often disable the randomisation step before running the sort --- paradoxically, this made it easier to spot in the line of LEDs where errors were occurring. When I did this with quicksort, I soon ran into _Recursion limit exceeded_ errors that didn't happen when the array was randomised beforehand, which was puzzling. It turns out that a potential issue with a basic quicksort is that if the array is already sorted (or nearly sorted) then it can become very inefficient. In my case, the many recursive calls filled up the limited stack space of the microprocessor on the Plasma 2040 before it could complete. Quicksort can be optimised by carefully selecting the "pivot" location that partitions the array at each step. I applied the "median-of-three" partition scheme, which chooses the start, middle, or end element of the array as the pivot, depending on which contains the largest value. Testing the modified quicksort on the sorted array no longer caused any errors, though I suspect that recursion limits could still become a problem in rare cases or with longer strings of LEDs. It just goes to show that there isn't a single sort algorithm which is ideal for all use cases - part of the point of this project!
 
 ## Twelfth Day: Bogosort (and some tidying up)
+
+![Gnome sort(](img/christmas-sorted-12-bogo.gif)
 
 **On the twelfth day of Christmas**, the tree is coming down and the decorations are being put away. It's time for [Bogosort](https://en.wikipedia.org/wiki/Bogosort). Bogosort or "bogus sort" simply repeatedly shuffles the array and checks to see whether or not it is sorted --- it could run until next Christmas and it probably wouldn't complete successfully. So what's the point? Well, mathematicians and computer scientists are very interested in the relative efficiency of different sorting algorithms. Look at the Wikipedia articles I've linked to and you will quickly run into discussions of how each algorithm's run-time is affected by starting conditions and how well it scales with the number of elements to be sorted. When comparing the efficiency of different algorithms, it can be useful think about a "worst case scenario", and bogosort is one of these. It will, eventually, sort the array, but as with [monkeys writing Shakespeare](https://en.wikipedia.org/wiki/Infinite_monkey_theorem), you might have to wait beyond the heat-death of the Universe before it gets there!
 
