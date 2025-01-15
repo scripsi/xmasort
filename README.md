@@ -28,7 +28,7 @@ I have a few strings of ws2812 LEDs and some Pimoroni Plasma 2040 boards to run 
 
 ## Hardware
 
-![Hardware used (banana for scale)](img/christmas-sorted-hardware.jpg)
+![Hardware used (banana for scale)](img/christmas-sorted-hardware.jpg "Hardware used (banana for scale)")
 
 The hardware consists of [Pimoroni Plasma 2040](https://shop.pimoroni.com/products/plasma-2040) boards connected to a variety of programmable RGB LED strings and powered using USB-C. I have three types of LED string:
 
