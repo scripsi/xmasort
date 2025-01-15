@@ -1,6 +1,25 @@
 # xmasort
 _Christmas. Sorted._
 
+- [Introduction](#introduction)
+- [Hardware](#hardware)
+- [Advent: Basic setup](#advent-basic-setup)
+
+_The 12 sorts of Christmas:_
+
+- [First Day: Bubble Sort](#first-day-bubble-sort)
+- [Second Day: Gnome sort](#second-day-gnome-sort-and-some-efficiency-improvements)
+- [Third Day: Insertion sort](#third-day-insertion-sort-and-a-configuration-file)
+- [Fourth Day: Bead sort](#fourth-day-bead-sort-and-speed-control)
+- [Fifth Day: Pancake sort](#fifth-day-pancake-sort)
+- [Sixth Day: Tree sort](#sixth-day-tree-sort-and-sort-method-selection)
+- [Seventh Day: Cocktail shaker sort](#seventh-day-cocktail-shaker-sort)
+- [Eighth Day: Selection sort](#eighth-day-selection-sort)
+- [Ninth Day: Bucket sort](#ninth-day-bucket-sort-and-fixing-colour-order)
+- [Tenth Day: Heapsort](#tenth-day-heapsort)
+- [Eleventh Day: Quicksort](#eleventh-day-quicksort)
+- [Twelfth Day: Bogosort](#twelfth-day-bogosort-and-some-tidying-up)
+
 ## Introduction
 
 I have a few strings of ws2812 LEDs and some Pimoroni Plasma 2040 boards to run them as Christmas lights. In the past, I had just downloaded a ready-made library to make pretty patterns with them, but this year I wanted to challenge myself by programming the light sequences myself. I wasn't sure what patterns to try and make, until my son --- knowing that I am a bit of a geek --- jokingly asked "What's your favourite sorting algorithm?"
@@ -25,9 +44,10 @@ The sort order is represented as integer Hue values on the colour wheel (0-360 d
 
 The Plasma 2040s are all flashed with Pimoroni's [Pirate-brand MicroPython](https://github.com/pimoroni/pimoroni-pico/releases) version 1.23.0. [Microsoft Visual Studio Code](https://code.visualstudio.com/) is used to program them, with the help of the recently-released official [Raspberry Pi Pico Extension](https://marketplace.visualstudio.com/items?itemName=raspberry-pi.raspberry-pi-pico). The `main.py` program installed on each Plasma 2040 will run automatically whenever it is powered on, taking its configuration from `config.py`.
 
-To install, copy `main.py` and `config.py` from the `src/` directory of this repository to the Plasma 2040. If using the Raspberry Pi Pico extension in VSCode, you can do this by opening the command palette with CTRL-SHIFT-P and choosing the `MicroPico: Upload file to pico` command for each file. If necessary, edit `config.py` to match your LED string before uploading.
-
 The basic `main.py` imports necessary libraries, sets up constants for things like the number of LEDs and default brightness, and has functions for initialising the array, randomising the array, and updating the LED colours from the array. It then enters an infinite loop, repeatedly randomising and then sorting the array using the chosen algorithm.
+
+To install to your own hardware, copy `main.py` and `config.py` from the `src/` directory of this repository to the Plasma 2040. If using the Raspberry Pi Pico extension in VSCode, you can do this by opening the command palette with CTRL-SHIFT-P and choosing the `MicroPico: Upload file to pico` command for each file. If necessary, edit `config.py` to match your LED string before uploading.
+
 
 ## First Day: Bubble sort
 
